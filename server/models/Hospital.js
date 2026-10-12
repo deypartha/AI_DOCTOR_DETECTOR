@@ -8,6 +8,13 @@ const hospitalSchema = new mongoose.Schema(
     openTime: String,
     closeTime: String,
     departments: [String],
+    city: String,
+    location: {
+      lat: Number,
+      lng: Number,
+    },
+    emergencyPhone: String,
+    emergencyAvailable: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

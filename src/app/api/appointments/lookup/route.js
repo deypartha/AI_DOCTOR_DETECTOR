@@ -22,8 +22,8 @@ export async function GET(req) {
     if (email) orClauses.push({ email: { $regex: new RegExp(`^${email}$`, "i") } });
 
     const appointments = await Appointment.find({ $or: orClauses })
-      .populate("doctorId", "name specialization")
-      .populate("hospitalId", "name address phone")
+      .populate("doctorId", "name specialization consultationFee")
+      .populate("hospitalId", "name address phone emergencyPhone")
       .sort({ date: -1, time: 1 })
       .limit(20);
 

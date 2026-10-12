@@ -254,6 +254,8 @@ export default function BookAppointment({ doctor, hospital }) {
           email,
           phone,
           reason,
+          isEmergency: Boolean(reason && reason.includes("EMERGENCY")),
+          severity: reason && reason.includes("EMERGENCY") ? "emergency" : "routine",
         }),
       });
 

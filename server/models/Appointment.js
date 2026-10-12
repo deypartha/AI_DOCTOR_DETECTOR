@@ -22,6 +22,18 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       default: "confirmed",
     },
+    isEmergency: {
+      type: Boolean,
+      default: false,
+    },
+    severity: {
+      type: String,
+      enum: ["routine", "urgent", "emergency"],
+      default: "routine",
+    },
+    aiDiagnosis: String,
+    aiSummary: String,
+    emergencyNotes: String,
   },
   { timestamps: true }
 );

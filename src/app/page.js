@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
+import AISymptomSection from "../components/AISymptomSection";
 import Features from "../components/Features";
 import HowItWorks from "../components/HowItWorks";
 import FeaturedHospitals from "../components/FeaturedHospitals";
@@ -11,9 +12,10 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
+      <AISymptomSection />
       <Features />
       <HowItWorks />
-      <FeaturedHospitals /> {/* 👈 HERE */}
+      <FeaturedHospitals />
       <CTA />
       <Footer />
     </>

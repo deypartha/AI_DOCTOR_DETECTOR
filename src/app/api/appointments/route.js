@@ -37,8 +37,8 @@ export async function GET(req) {
 
     // populate doctorId so appointment rows can show the doctor's name
     const appointments = await Appointment.find(filter)
-      .populate("doctorId", "name specialization")
-      .populate("hospitalId", "name")
+      .populate("doctorId", "name specialization consultationFee")
+      .populate("hospitalId", "name address phone emergencyPhone")
       .sort({ date: -1, time: 1 });
 
     return Response.json(appointments);

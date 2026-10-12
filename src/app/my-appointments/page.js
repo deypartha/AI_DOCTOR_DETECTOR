@@ -218,8 +218,41 @@ function AppointmentCard({ appt, router }) {
             </p>
           )}
         </div>
-        <span className={statusCfg.cls}>{statusCfg.label}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {appt.isEmergency && (
+            <span
+              style={{
+                background: "#dc2626",
+                color: "white",
+                padding: "3px 10px",
+                borderRadius: 20,
+                fontSize: 12,
+                fontWeight: 700,
+              }}
+            >
+              🚨 EMERGENCY
+            </span>
+          )}
+          <span className={statusCfg.cls}>{statusCfg.label}</span>
+        </div>
       </div>
+
+      {appt.aiDiagnosis && (
+        <div
+          style={{
+            background: "#f0f9ff",
+            border: "1px solid #bae6fd",
+            padding: "8px 12px",
+            borderRadius: 8,
+            fontSize: 13,
+            color: "#0369a1",
+            marginBottom: 12,
+            fontWeight: 600,
+          }}
+        >
+          🤖 AI Detected Condition: <strong>{appt.aiDiagnosis}</strong>
+        </div>
+      )}
 
       {/* Detail grid */}
       <div className="lk-appt-grid">
@@ -260,21 +293,51 @@ function AppointmentCard({ appt, router }) {
       {/* Reason (if any) */}
       {appt.reason && (
         <p className="lk-appt-reason">
-          <strong>Reason:</strong> {appt.reason}
+          <strong>Reason / Symptoms:</strong> {appt.reason}
         </p>
       )}
 
-      {/* CTA: book again for this doctor */}
-      {appt.doctorId?._id && (
-        <div className="lk-appt-footer">
+      {/* CTA: book again or emergency navigation */}
+      <div className="lk-appt-footer" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        {appt.isEmergency && appt.hospitalId?.phone && (
+          <a
+            href={`tel:${appt.hospitalId.emergencyPhone || appt.hospitalId.phone}`}
+            className="btn-outline"
+            style={{
+              borderColor: "#ef4444",
+              color: "#dc2626",
+              fontWeight: 700,
+              fontSize: 13,
+              textDecoration: "none",
+              padding: "8px 14px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <IoCallOutline /> Call Hospital
+          </a>
+        )}
+        {hospAddr && (
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hospName + " " + hospAddr)}`}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-outline"
+            style={{ fontSize: 13, textDecoration: "none", padding: "8px 14px" }}
+          >
+            📍 Directions
+          </a>
+        )}
+        {appt.doctorId?._id && (
           <button
             className="lk-book-btn"
             onClick={() => router.push(`/doctors/${appt.doctorId._id}`)}
           >
             Book again
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

@@ -7,7 +7,11 @@ const hospitals = [
   {
     name: "Apollo Multispecialty Hospital",
     address: "Lawrence Road, Amritsar, Punjab 143001",
+    city: "Amritsar",
+    location: { lat: 31.6340, lng: 74.8723 },
     phone: "+91 98760 11111",
+    emergencyPhone: "+91 98760 11119",
+    emergencyAvailable: true,
     openTime: "8:00 AM",
     closeTime: "9:00 PM",
     departments: ["Cardiology", "Neurology", "Orthopedics", "Oncology"],
@@ -22,7 +26,11 @@ const hospitals = [
   {
     name: "Fortis Escorts Hospital",
     address: "Majitha Verka Bypass, Amritsar, Punjab 143004",
+    city: "Amritsar",
+    location: { lat: 31.6521, lng: 74.9085 },
     phone: "+91 98760 22222",
+    emergencyPhone: "+91 98760 22229",
+    emergencyAvailable: true,
     openTime: "9:00 AM",
     closeTime: "8:00 PM",
     departments: ["Gynecology", "Pediatrics", "Dermatology", "General Medicine"],
@@ -37,7 +45,11 @@ const hospitals = [
   {
     name: "Max Super Speciality Hospital",
     address: "GT Road, Jalandhar, Punjab 144001",
+    city: "Jalandhar",
+    location: { lat: 31.3260, lng: 75.5762 },
     phone: "+91 98760 33333",
+    emergencyPhone: "+91 98760 33339",
+    emergencyAvailable: true,
     openTime: "7:00 AM",
     closeTime: "10:00 PM",
     departments: ["Urology", "Gastroenterology", "Pulmonology", "Endocrinology"],
@@ -52,7 +64,11 @@ const hospitals = [
   {
     name: "Ivy Hospital",
     address: "Sector 71, Mohali, Punjab 160071",
+    city: "Mohali",
+    location: { lat: 30.7046, lng: 76.7179 },
     phone: "+91 98760 44444",
+    emergencyPhone: "+91 98760 44449",
+    emergencyAvailable: true,
     openTime: "8:30 AM",
     closeTime: "7:30 PM",
     departments: ["Ophthalmology", "ENT", "Psychiatry", "Physiotherapy"],
@@ -67,7 +83,11 @@ const hospitals = [
   {
     name: "Civil Hospital Ludhiana",
     address: "Ferozepur Road, Ludhiana, Punjab 141001",
+    city: "Ludhiana",
+    location: { lat: 30.9010, lng: 75.8573 },
     phone: "+91 98760 55555",
+    emergencyPhone: "+91 98760 55559",
+    emergencyAvailable: true,
     openTime: "9:00 AM",
     closeTime: "5:00 PM",
     departments: ["General Medicine", "Surgery", "Radiology", "Pathology"],
@@ -96,7 +116,8 @@ async function seed() {
   for (const h of hospitals) {
     // 1. Create hospital
     const hospital = await post("/api/hospitals", {
-      name: h.name, address: h.address, phone: h.phone,
+      name: h.name, address: h.address, city: h.city, location: h.location, phone: h.phone,
+      emergencyPhone: h.emergencyPhone, emergencyAvailable: h.emergencyAvailable,
       openTime: h.openTime, closeTime: h.closeTime, departments: h.departments,
     });
 

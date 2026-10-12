@@ -20,9 +20,24 @@ export default function Hero() {
         Simple, fast, and secure healthcare scheduling.
       </p>
 
-      <div className="hero-buttons">
-        <button className="btn-primary" onClick={() => router.push("/hospitals")}>Find a Hospital →</button>
-        <button className="btn-outline">Learn More</button>
+      <div className="hero-buttons" style={{ flexWrap: "wrap", justifyContent: "center", gap: "12px", marginTop: "15px" }}>
+        <button
+          className="btn-primary"
+          style={{ background: "#0284c7", display: "flex", alignItems: "center", gap: "8px", fontWeight: "bold" }}
+          onClick={() => router.push("/ai-consultation")}
+        >
+          🤖 AI Problem Detector & Doctor Finder →
+        </button>
+        <button
+          className="btn-outline"
+          style={{ borderColor: "#ef4444", color: "#dc2626", fontWeight: "bold", background: "#fef2f2" }}
+          onClick={() => router.push("/ai-consultation")}
+        >
+          🚨 Emergency Fast Booking
+        </button>
+        <button className="btn-outline" onClick={() => router.push("/hospitals")}>
+          Find a Hospital
+        </button>
       </div>
     </section>
   );

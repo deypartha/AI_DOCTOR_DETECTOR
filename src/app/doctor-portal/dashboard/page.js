@@ -32,18 +32,51 @@ function AppointmentRow({ appt, onStatusChange }) {
   }
 
   return (
-    <div className="dash-appt-row">
+    <div
+      className="dash-appt-row"
+      style={appt.isEmergency ? { borderLeft: "4px solid #ef4444", background: "#fffafa" } : {}}
+    >
       <div className="dash-appt-info">
-        <div className="dash-appt-avatar">
+        <div
+          className="dash-appt-avatar"
+          style={appt.isEmergency ? { background: "#fee2e2", color: "#dc2626" } : {}}
+        >
           {(appt.patientName || "?")[0].toUpperCase()}
         </div>
         <div>
-          <p className="dash-appt-name">{appt.patientName || "Unknown"}</p>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <p className="dash-appt-name">{appt.patientName || "Unknown"}</p>
+            {appt.isEmergency && (
+              <span
+                style={{
+                  background: "#dc2626",
+                  color: "white",
+                  padding: "2px 8px",
+                  borderRadius: 12,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: 0.5,
+                }}
+              >
+                🚨 EMERGENCY
+              </span>
+            )}
+          </div>
           <p className="dash-appt-meta">
             <IoCallOutline /> {appt.phone || "—"} &nbsp;·&nbsp;
-            <IoTimeOutline /> {appt.time}
+            <IoTimeOutline /> {appt.time} &nbsp;·&nbsp; {appt.date}
           </p>
+          {appt.aiDiagnosis && (
+            <p style={{ fontSize: 12, color: "#0284c7", fontWeight: 600, margin: "2px 0" }}>
+              🤖 AI Detected Problem: {appt.aiDiagnosis}
+            </p>
+          )}
           {appt.reason && <p className="dash-appt-reason">{appt.reason}</p>}
+          {appt.emergencyNotes && (
+            <p style={{ fontSize: 12, color: "#b91c1c", fontWeight: 600, margin: "2px 0" }}>
+              ⚠️ {appt.emergencyNotes}
+            </p>
+          )}
         </div>
       </div>
       <div className="dash-appt-right">
@@ -191,9 +224,11 @@ export default function DoctorDashboard() {
   const todayStr = new Date().toISOString().slice(0, 10);
   const todayAppts = appointments.filter((a) => a.date === todayStr);
   const upcoming = appointments.filter((a) => a.date >= todayStr && a.status === "confirmed");
+  const emergencyAppts = appointments.filter((a) => a.isEmergency);
   const stats = {
     today: todayAppts.length,
     upcoming: upcoming.length,
+    emergency: emergencyAppts.length,
     total: appointments.length,
     completed: appointments.filter((a) => a.status === "completed").length,
   };
@@ -236,6 +271,13 @@ export default function DoctorDashboard() {
             <FaCalendarAlt /> Today
           </button>
           <button
+            className={`dash-nav-btn ${tab === "emergency" ? "active" : ""}`}
+            style={emergencyAppts.length > 0 ? { color: "#dc2626", fontWeight: "bold" } : {}}
+            onClick={() => setTab("emergency")}
+          >
+            🚨 Emergency ({emergencyAppts.length})
+          </button>
+          <button
             className={`dash-nav-btn ${tab === "all" ? "active" : ""}`}
             onClick={() => setTab("all")}
           >
@@ -259,6 +301,10 @@ export default function DoctorDashboard() {
 
         {/* Stats bar */}
         <div className="dash-stats">
+          <div className="dash-stat-box" style={stats.emergency > 0 ? { borderColor: "#fca5a5", background: "#fef2f2" } : {}}>
+            <span className="dash-stat-num" style={stats.emergency > 0 ? { color: "#dc2626" } : {}}>{stats.emergency}</span>
+            <span className="dash-stat-label" style={stats.emergency > 0 ? { color: "#b91c1c", fontWeight: 700 } : {}}>🚨 Emergency</span>
+          </div>
           <div className="dash-stat-box">
             <span className="dash-stat-num">{stats.today}</span>
             <span className="dash-stat-label">Today</span>
@@ -276,6 +322,36 @@ export default function DoctorDashboard() {
             <span className="dash-stat-label">Total</span>
           </div>
         </div>
+
+        {/* EMERGENCY TAB */}
+        {tab === "emergency" && (
+          <div className="dash-section">
+            <h2 className="dash-section-title" style={{ color: "#dc2626" }}>
+              🚨 Emergency Priority Cases
+              <span className="dash-count" style={{ background: "#fee2e2", color: "#dc2626" }}>{emergencyAppts.length}</span>
+            </h2>
+            {loading ? (
+              [1,2].map((i) => (
+                <div key={i} className="dash-appt-row skeleton-card">
+                  <div className="skeleton dash-appt-skeleton" />
+                </div>
+              ))
+            ) : emergencyAppts.length === 0 ? (
+              <div className="dash-empty">
+                <FaCalendarAlt className="dash-empty-icon" />
+                <p>No active emergency cases reported.</p>
+              </div>
+            ) : (
+              emergencyAppts.map((appt) => (
+                <AppointmentRow
+                  key={appt._id}
+                  appt={appt}
+                  onStatusChange={handleStatusChange}
+                />
+              ))
+            )}
+          </div>
+        )}
 
         {/* TODAY TAB */}
         {tab === "today" && (

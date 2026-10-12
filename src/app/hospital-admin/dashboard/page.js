@@ -534,18 +534,45 @@ export default function AdminDashboard() {
               [...appointments]
                 .sort((a, b) => b.date.localeCompare(a.date) || a.time.localeCompare(b.time))
                 .map((appt) => (
-                  <div key={appt._id} className="dash-appt-row">
+                  <div
+                    key={appt._id}
+                    className="dash-appt-row"
+                    style={appt.isEmergency ? { borderLeft: "4px solid #ef4444", background: "#fffafa" } : {}}
+                  >
                     <div className="dash-appt-info">
-                      <div className="dash-appt-avatar">
+                      <div
+                        className="dash-appt-avatar"
+                        style={appt.isEmergency ? { background: "#fee2e2", color: "#dc2626" } : {}}
+                      >
                         {(appt.patientName || "?")[0].toUpperCase()}
                       </div>
                       <div>
-                        <p className="dash-appt-name">{appt.patientName}</p>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                          <p className="dash-appt-name">{appt.patientName}</p>
+                          {appt.isEmergency && (
+                            <span
+                              style={{
+                                background: "#dc2626",
+                                color: "white",
+                                padding: "2px 8px",
+                                borderRadius: 12,
+                                fontSize: 11,
+                                fontWeight: 700,
+                              }}
+                            >
+                              🚨 EMERGENCY
+                            </span>
+                          )}
+                        </div>
                         <p className="dash-appt-meta">
                           {appt.date} &nbsp;·&nbsp; {appt.time} &nbsp;·&nbsp;
-                          {/* Show doctor name if populated */}
-                          Dr. {appt.doctorId?.name || "—"}
+                          Dr. {appt.doctorId?.name || "—"} ({appt.doctorId?.specialization || "Doctor"})
                         </p>
+                        {appt.aiDiagnosis && (
+                          <p style={{ fontSize: 12, color: "#0284c7", fontWeight: 600, margin: "2px 0" }}>
+                            🤖 AI Triage: {appt.aiDiagnosis}
+                          </p>
+                        )}
                         {appt.reason && (
                           <p className="dash-appt-reason">{appt.reason}</p>
                         )}
